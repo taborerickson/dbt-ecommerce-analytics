@@ -1,15 +1,40 @@
-Welcome to your new dbt project!
+# dbt E-Commerce Analytics 
 
-### Using the starter project
+A lightweight dbt project transforming Google's public `thelook_ecommerce` dataset into a staging → star schema analytics layer on BigQuery. 
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Stack 
+- **Transformation:** dbt Core (v1 engine) 
+- **Warehouse:** Google BigQuery (Sandbox, free tier) 
+- **Source data:** `bigquery-public-data.thelook_ecommerce` 
+- **Version control:** GitHub 
 
+## Architecture 
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+Staging (views) → Marts (tables, star schema) 
+
+- **Staging:** 1:1 cleaned views of source tables (renamed/typed columns only, no business logic) 
+- **Marts:** 
+    - `dim_customers` - customer profile + lifetime order metrics 
+    - `dim_products` - product catalog + margin + distribution center 
+    - `fact_orders` - order line-item grain fact table 
+
+![DAG Lineage](docs/dag_screenshot.png) 
+
+## Setup 
+
+1. Clone the repo 
+2. Create a virtual environment and install dependencies: 
+    ```powershell 
+    python -m venv venv 
+    .\venv\Scripts\Activate.ps1
+    pip install dbt-core dbt-bigquery
+    ```
+3. Configure `~/.dbt/profiles.yml` with your own GCP service account 
+4. Run: 
+    ```powershell 
+    dbt debug 
+    dbt run 
+    dbt test 
+    dbt docs generate && dbt docs serve 
+    ```
+

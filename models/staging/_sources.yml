@@ -1,0 +1,73 @@
+version: 2 
+
+sources: 
+  - name: thelook_ecommerce 
+    database: bigquery-public-data 
+    schema: thelook_ecommerce 
+    description: "Public e-commerce dataset provided by Google, simulating a clothing retailer."
+    tables: 
+      - name: orders 
+        description: "One row per order (order header level, not line item)."
+      - name: order_items 
+        description: "One row per line item within an order."
+      - name: users
+        description: "Customer/user records."
+      - name: products
+        description: "Product catalog."
+      - name: distribution_centers
+        description: "Warehouse/distribution center reference table."
+      - name: events
+        description: "Web/app clickstream events (not used in this project's marts, included for completeness)."
+
+models: 
+  - name: stg_orders
+    description: "Cleaned order-level data, one row per order."
+    columns:
+      - name: order_id
+        description: "Primary key for orders."
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_users')
+              field: user_id
+
+  - name: stg_order_items
+    description: "Cleaned order line-item data, one row per item per order."
+    columns:
+      - name: order_item_id
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        tests:
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+
+  - name: stg_users
+    description: "Cleaned customer/user records."
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_products
+    description: "Cleaned product catalog."
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_distribution_centers
+    description: "Cleaned distribution center reference data."
+    columns:
+      - name: distribution_center_id
+        tests:
+          - unique
+          - not_null

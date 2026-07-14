@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "One row per customer with lifetime order metrics."
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_products
+    description: "One row per product with margin and distribution center info."
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_orders
+    description: "One row per order line item — the core fact table for order analysis."
+    columns:
+      - name: order_item_id
+        tests:
+          - unique
+          - not_null
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ['Complete', 'Processing', 'Shipped', 'Cancelled', 'Returned']
