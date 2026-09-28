@@ -5,7 +5,7 @@ models:
     description: "One row per customer with lifetime order metrics."
     columns:
       - name: user_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -13,7 +13,7 @@ models:
     description: "One row per product with margin and distribution center info."
     columns:
       - name: product_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -21,10 +21,16 @@ models:
     description: "One row per order line item — the core fact table for order analysis."
     columns:
       - name: order_item_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: order_status
-        tests:
+        data_tests:
           - accepted_values:
-              values: ['Complete', 'Processing', 'Shipped', 'Cancelled', 'Returned']
+              arguments:
+                values:
+                  - Complete
+                  - Processing
+                  - Shipped
+                  - Cancelled
+                  - Returned

@@ -25,34 +25,36 @@ models:
     columns:
       - name: order_id
         description: "Primary key for orders."
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: user_id
-        tests:
+        data_tests:
           - not_null
           - relationships:
-              to: ref('stg_users')
-              field: user_id
+              arguments:
+                to: ref('stg_users')
+                field: user_id
 
   - name: stg_order_items
     description: "Cleaned order line-item data, one row per item per order."
     columns:
       - name: order_item_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: product_id
-        tests:
+        data_tests:
           - relationships:
-              to: ref('stg_products')
-              field: product_id
+              arguments:
+                to: ref('stg_products')
+                field: product_id
 
   - name: stg_users
     description: "Cleaned customer/user records."
     columns:
       - name: user_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -60,7 +62,7 @@ models:
     description: "Cleaned product catalog."
     columns:
       - name: product_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -68,6 +70,6 @@ models:
     description: "Cleaned distribution center reference data."
     columns:
       - name: distribution_center_id
-        tests:
+        data_tests:
           - unique
           - not_null
