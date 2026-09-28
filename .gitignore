@@ -4,5 +4,9 @@ logs/
 *.json 
 .env 
 dbt_env/ 
-dbt_env/* 
+dbt_env/*
+venv/
+.venv/
+.ci/
+profiles.yml
 __pycache__/ 
